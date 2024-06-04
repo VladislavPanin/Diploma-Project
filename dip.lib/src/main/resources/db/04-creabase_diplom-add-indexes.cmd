@@ -1,0 +1,1 @@
+psql -f 04-db-add-indexes.sql -U postgres

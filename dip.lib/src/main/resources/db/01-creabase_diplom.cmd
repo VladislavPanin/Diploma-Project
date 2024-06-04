@@ -1,0 +1,1 @@
+psql -f 01-db.sql -U postgres

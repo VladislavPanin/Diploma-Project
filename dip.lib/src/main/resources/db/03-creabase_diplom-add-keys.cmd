@@ -1,0 +1,1 @@
+psql -f 03-db-add-keys.sql -U postgres

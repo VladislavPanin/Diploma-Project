@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.2</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>com.sibertech</groupId>
+	<artifactId>dip.conf</artifactId>
+	<version>1.2</version>
+	<name>dip. conf</name>
+	<packaging>jar</packaging>
+
+	<description>
+		-- Слушает на порту 8070 --
+                Проект микросервиса-провайдера конфигурации для других микросервисов диплома.
+		Каждый микросервис, после запуска, должен запросить на этом  сервисе url "/dip-config/get".
+		В ответ микросервис получит экземпляр AppConf.
+                Если этот микросервис (провайдер конфигурации) запускается на хосте с БД, то
+                то url такой:
+                        "http:/" + AppConf.ipDbHost + ":8070/dip-conf/get"
+                    то есть, у меня сейчас:
+                        "http:/10.10.180.1:8070/dip-conf/get"
+
+            !! Что бы микросервис сделал запрос конфигурации и установил параметры прогонов - нужно сделать на этот
+            микросервис запрос "http:/localhost:порт_сервиса/**root-mc-url**/get-config"
+
+        </description>
+
+	<properties>
+            <java.version>17</java.version>
+            <start-class>com.sibertech.AppConfProvider</start-class>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+                <dependency>
+                    <groupId>org.apache.httpcomponents.client5</groupId>
+                    <artifactId>httpclient5</artifactId>
+                </dependency>
+                <dependency>
+                    <groupId>com.sibertech</groupId>
+                    <artifactId>dip.lib</artifactId>
+                    <version>1.2</version>
+                </dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

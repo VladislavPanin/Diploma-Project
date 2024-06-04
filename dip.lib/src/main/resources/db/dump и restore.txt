@@ -1,0 +1,21 @@
+pg_dump <параметры> <имя базы> > <файл для сохранения копии> 
+
+pg_dump -U postgres db_diplom > dump-db_diplom--sale-data-without-keys-and-inxs.sql
+pg_dump -U postgres db_diplom > dump--full-100mln--db_diplom--sale-data-without-keys-and-inxs.sql
+pg_dump -U postgres db_diplom > dump-db_diplom--full-202Gb.sql
+
+
+INSERT INTO 
+  order_numbers_dictionary__10(
+  order_number, region_id, market_id, terminal_id, terminal_basket_number, basket_price, order_time, order_date, comment) 
+(SELECT 
+  order_number, region_id, market_id, terminal_id, terminal_basket_number, basket_price, order_time, order_date, comment FROM order_numbers_dictionary);
+  
+
+INSERT INTO 
+  sales__10(  
+  order_number, line_number_in_order, region_id, market_id, terminal_id, product_id, count_of_product, price_of_one_piece, order_date, client_id, comment)
+(SELECT   
+  order_number, line_number_in_order, region_id, market_id, terminal_id, product_id, count_of_product, price_of_one_piece, order_date, client_id, comment FROM sales)
+  
+  

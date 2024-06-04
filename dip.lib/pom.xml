@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.2.2</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>com.sibertech</groupId>
+	<artifactId>dip.lib</artifactId>
+	<version>1.2</version>
+	<name>0. Библиотека генерации данных проектов диплома</name>
+        <packaging>jar</packaging>
+
+	<description>
+            Общая библиотека генерации данных структуры БД сетевых продаж (Postgres 15).
+            Собирается как jar-файл (то есть явно указан тег packaging)
+            Любой jar-файл, собранный из проекта Maven (то есть имеющий groupId, artifactId и version), можно использовать
+            в проекте как библиотеку классов Java, объявив от неё зависимость.
+            ----
+            ! Есть особенность - не взирая на то, что мы используем в библиотеке spring boot, сборка (секция build) библиотеки должна проводиться
+            плагином мавена "maven-jar-plugin" (А НЕ СПРИНГОВСКИМ spring-boot-maven-plugin). Кроме этого, в библиотеке не должно быть стандартных
+            ресурсов - то есть не должно быть "application.properties", "logback.xml"
+            ----
+            При этом, Maven при сборке проекта, использующего эту библиотеку, должен найти эту библиотеку, а значит она должна быть как минимум
+            в локальном репозитории Maven-а.
+            ----
+            А чтобы поместить библиотеку в локальный репозиторий Maven, нужно при сборке этой библиотеки указать этап "Install"
+            ----
+            Вообще говоря, во время цикла сборки Maven выполняет следующие этапы:
+                validate   - проверка правильности проекта.
+                compile    - компиляция предоставленного исходного кода в бинарные артефакты.
+                test       - выполнение модульных тестов.
+                package    - упаковка скомпилированного кода в архивный файл.
+                integration-test       - выполнение дополнительных тестов, для которых требуется упаковка.
+                verify     - проверка, действителен ли пакет.
+                install    - установка файла пакета в локальный репозиторий Maven.
+                deploy     - развертывание файла пакета на удаленном сервере или в репозитории.
+            Дополнительно, у Maven-а есть еще один этап
+                clean      - чистка каталога сборки (удаление содержимого каталога target)
+            Этап clean должен быть затребован явно, например вот так:
+                mvn clean package
+                mvn clean install и т.д.
+            Netbeans запускает "mvn clean install" при выборе пункта меню проекта "Clean and Build"
+            А при выборе меню "Build", он выполняет только "mvn install" - то есть не пересобирает те файлы, которые считает актуальными.
+        </description>
+
+	<properties>
+		<java.version>17</java.version>
+                <!-- в библиотеке классов не должно быть <start-class>com.sibertech.AppDbGen</start-class> -->
+                <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+                <dependency>
+                    <groupId>org.apache.httpcomponents.client5</groupId>
+                    <artifactId>httpclient5</artifactId>
+                </dependency>
+	</dependencies>
+
+        <build>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                            <configuration>
+                                <classifier>origin</classifier>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+
+</project>
